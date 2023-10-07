@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Enrollment Form</title>
+  <style>
+    /* Add your CSS styling here */
+  </style>
+</head>
+<body>
+
+  <form id="enrollmentForm">
+    <label>Roll No:</label>
+    <input type="text" id="rollNo" disabled>
+
+    <label>Full Name:</label>
+    <input type="text" id="fullName" required>
+
+    <label>Class:</label>
+    <input type="text" id="class" required>
+
+    <label>Birth Date:</label>
+    <input type="date" id="birthDate" required>
+
+    <label>Address:</label>
+    <input type="text" id="address" required>
+
+    <label>Enrollment Date:</label>
+    <input type="date" id="enrollmentDate" required>
+
+    <button type="button" onclick="saveData()">Save</button>
+    <button type="button" onclick="updateData()">Update</button>
+    <button type="button" onclick="resetForm()">Reset</button>
+  </form>
+
+  <script>
+    // JavaScript code for interaction with JSONPowerDB
+
+    // Simulating database
+    let database = {
+      "STUDENT-TABLE": [
+        {
+          "Roll-No": 1,
+          "Full-Name": "John Doe",
+          "Class": "10th",
+          "Birth-Date": "2005-01-01",
+          "Address": "123 Main St, City",
+          "Enrollment-Date": "2023-01-15"
+        },
+        {
+          "Roll-No": 2,
+          "Full-Name": "Jane Doe",
+          "Class": "12th",
+          "Birth-Date": "2003-05-12",
+          "Address": "456 Oak St, Town",
+          "Enrollment-Date": "2022-08-20"
+        }
+        // More entries can be added
+      ]
+    };
+
+    let currentIndex = 0;
+
+    function populateForm(index) {
+      const student = database["STUDENT-TABLE"][index];
+      document.getElementById("rollNo").value = student["Roll-No"];
+      document.getElementById("fullName").value = student["Full-Name"];
+      document.getElementById("class").value = student["Class"];
+      document.getElementById("birthDate").value = student["Birth-Date"];
+      document.getElementById("address").value = student["Address"];
+      document.getElementById("enrollmentDate").value = student["Enrollment-Date"];
+
+      // Enable Update and Reset buttons
+      document.querySelector('button:nth-child(2)').disabled = false;
+      document.querySelector('button:nth-child(3)').disabled = false;
+    }
+
+    function saveData() {
+      // Save data to the database
+      const formData = {
+        "Roll-No": document.getElementById("rollNo").value,
+        "Full-Name": document.getElementById("fullName").value,
+        "Class": document.getElementById("class").value,
+        "Birth-Date": document.getElementById("birthDate").value,
+        "Address": document.getElementById("address").value,
+        "Enrollment-Date": document.getElementById("enrollmentDate").value
+      };
+
+      database["STUDENT-TABLE"].push(formData);
+
+      // Reset form
+      resetForm();
+    }
+
+    function updateData() {
+      // Update data in the database
+      const formData = {
+        "Roll-No": document.getElementById("rollNo").value,
+        "Full-Name": document.getElementById("fullName").value,
+        "Class": document.getElementById("class").value,
+        "Birth-Date": document.getElementById("birthDate").value,
+        "Address": document.getElementById("address").value,
+        "Enrollment-Date": document.getElementById("enrollmentDate").value
+      };
+
+      database["STUDENT-TABLE"][currentIndex] = formData;
+
+      // Reset form
+      resetForm();
+    }
+
+    function resetForm() {
+      // Reset form to initial state
+      document.getElementById("enrollmentForm").reset();
+
+      // Disable Update and Reset buttons
+      document.querySelector('button:nth-child(2)').disabled = true;
+      document.querySelector('button:nth-child(3)').disabled = true;
+
+      // Move cursor to the Roll No field
+      document.getElementById("rollNo").focus();
+    }
+
+    // Populate form on page load
+    populateForm(currentIndex);
+  </script>
+
+</body>
+</html>
